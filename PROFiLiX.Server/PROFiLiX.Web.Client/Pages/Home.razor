@@ -1,0 +1,437 @@
+﻿@page "/"
+
+@using PROFiLiX.Web.Shared.Common
+@using PROFiLiX.Web.Shared.Models.Enum
+@using PROFiLiX.Web.Shared.Models
+
+<PageTitle>PROFiLiX</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudText Typo="Typo.h5" Align="Align.Left" Class="px-4">
+        User Profile Summary
+    </MudText>
+
+    <br />
+
+    <MudGrid Spacing="2" Justify="Justify.FlexStart">
+
+        <MudItem xs="12" md="6" lg="4">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Total Profiles</MudText>
+                        <MudText Typo="Typo.body2">Total number of profiles registered regardless of profile type.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Info">@totalProfiles</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="4">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Total Size</MudText>
+                        <MudText Typo="Typo.body2">Total data size for all the profiles registered regardless of profile type.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.FileCopy" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Info">@totalProfileSize</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="4">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Temporary Data</MudText>
+                        <MudText Typo="Typo.body2">Total temporary data size for all the profiles registered regardless of profile type.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.FileCopy" Color="Color.Dark" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Dark">@totalTempSize</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="4">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Citrix Profile Management</MudText>
+                        <MudText Typo="Typo.body2">Total number of Citrix Profile Management profiles registered.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h4">@cpmProfiles</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="4">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Microsoft FSLogix</MudText>
+                        <MudText Typo="Typo.body2">Total number of Microsoft FSLogix profiles registered.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h4">@fsLogixProfiles</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="4">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Liquidware ProfileUnity</MudText>
+                        <MudText Typo="Typo.body2">Total number of Liquidware ProfileUnity profiles registered.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h4">@liquidwareProfiles</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="6">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Local Profile</MudText>
+                        <MudText Typo="Typo.body2">Total number of Local profiles registered. These profile are not managed by a profile solution.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h4">@localProfiles</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="6">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Unknown Profile Type</MudText>
+                        <MudText Typo="Typo.body2">Total number unknown profiles registered. These profile are not recognised by PROFiLiX.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle" Color="Color.Dark" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h4" Color="Color.Dark">@unknownProfiles</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="6">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Profile Type</MudText>
+                        <MudText Typo="Typo.body2">Breakdown of the individual profile types registered.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.AccountCircle"Color="Color.Info"/>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudChart ChartOptions="@(new() { ChartPalette = new[] { "#42587c", "#7785a0", "#acb4c5", "#27446b", "#27446b" } })" ChartType="ChartType.Donut" LegendPosition="Position.Bottom" Width="250px" Height="250px"
+                                  InputData="@profileBreakdown" InputLabels="@profileLabels">
+                        </MudChart>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="6">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Data Size</MudText>
+                        <MudText Typo="Typo.body2">Breakdown of the data size for the profile and temporary data..</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.FileCopy" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudChart ChartOptions="@(new() { ChartPalette = new[] { "#42587c", "#eb5d63" } })" ChartType="ChartType.Donut" LegendPosition="Position.Bottom" Width="250px" Height="250px"
+                                  InputData="@sizeBreakdown" InputLabels="@sizeLabels">
+                        </MudChart>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+    </MudGrid>
+
+</MudPaper>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudText Typo="Typo.h5" Align="Align.Left" Class="px-4">
+        Task Summary
+    </MudText>
+
+    <br />
+
+    <MudGrid Spacing="2" Justify="Justify.FlexStart">
+
+        <MudItem xs="12" md="6" lg="3">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Complete</MudText>
+                        <MudText Typo="Typo.body2">Total number of tasks completed by administrators on user endpoints.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.Recommend" Color="Color.Success" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Success">@completedTasks</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="3">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Running</MudText>
+                        <MudText Typo="Typo.body2">Total number of tasks still running on user endpoints.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.RunCircle" Color="Color.Info" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Info">@runningTasks</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="3">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Error</MudText>
+                        <MudText Typo="Typo.body2">Total number of tasks that did not complete on user endpoints.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.Error" Color="Color.Error" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Error">@erroredTasks</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" md="6" lg="3">
+            <MudCard Outlined="true" Style="height: 100%">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Unknown</MudText>
+                        <MudText Typo="Typo.body2">Total number of tasks in an unknown state.</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Outlined.QuestionMark" Color="Color.Dark" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (pageLoaded == true)
+                    {
+                        <MudText Typo="Typo.h3" Color="Color.Dark">@unknownTasks</MudText>
+                    }
+                    else
+                    {
+                        <MudProgressCircular Color="Color.Info" Size="Size.Large" Indeterminate="true" />
+                    }
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+
+    </MudGrid>
+
+</MudPaper>
+
+
+@code {
+
+    private List<EUCProfileBuddyTask> taskInformation = [];
+    private List<PROFiLiX.Web.Shared.Models.UserProfile> profileInformation = [];
+    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+
+    public int completedTasks;
+    public int runningTasks;
+    public int erroredTasks;
+    public int unknownTasks;
+    public int totalProfiles;
+    public string totalProfileSize = string.Empty;
+    public string totalTempSize = string.Empty;
+    public int localProfiles;
+    public int fsLogixProfiles;
+    public int cpmProfiles;
+    public int unknownProfiles;
+    public int liquidwareProfiles;
+    public double[]? profileBreakdown;
+    public string[]? profileLabels;
+    public double[]? sizeBreakdown;
+    public string[]? sizeLabels;
+    public bool pageLoaded = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var taskInformation = await EUCProfileBuddyTaskService.GetAllEUCProfileBuddyTasksAsync();
+
+        completedTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Completed).Count();
+        runningTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Running).Count();
+        erroredTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Errored).Count();
+        unknownTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Unknown).Count();
+
+        var profileInformation = await UserProfileService.GetAllUserProfilesAsync();
+
+        totalProfiles = userProfile.TotalProfiles(profileInformation);
+        totalProfileSize = userProfile.FormatFileSize(userProfile.TotalProfileSize(profileInformation));
+        totalTempSize = userProfile.FormatFileSize(userProfile.TotalTempSize(profileInformation));
+
+        localProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.Local).Count();
+        fsLogixProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.FSLogix).Count();
+        cpmProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.CitrixProfileManager).Count();
+        unknownProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.Unknown).Count();
+        liquidwareProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.Liquidware).Count();
+
+        double[] profilebd = { cpmProfiles, fsLogixProfiles, liquidwareProfiles, localProfiles, unknownProfiles };
+        string[] profilelbl = { "Citrix", "FSLogix", "ProfileUnity", "Local", "Unknown" };
+        profileBreakdown = profilebd;
+        profileLabels = profilelbl;
+
+        var sizeLeft = userProfile.TotalProfileSize(profileInformation) - userProfile.TotalTempSize(profileInformation);
+        double[] size = { sizeLeft, userProfile.TotalTempSize(profileInformation) };
+        string[] sizeLbl = { "Profile Data", "Temp Data" };
+        sizeBreakdown = size;
+        sizeLabels = sizeLbl;
+        pageLoaded = true;
+    }
+
+}

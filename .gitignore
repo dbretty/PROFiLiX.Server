@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+PROFiLiX.Server/PROFiLiX.Web/.config/dotnet-tools.json
+/PROFiLiX.Server/PROFiLiX.Web/Migrations
+PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db

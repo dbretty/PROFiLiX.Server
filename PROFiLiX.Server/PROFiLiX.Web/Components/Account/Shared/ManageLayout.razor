@@ -1,0 +1,12 @@
+﻿@inherits LayoutComponentBase
+@layout AccountLayout
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12" lg="2">
+        <MudText Typo="Typo.h6" GutterBottom="true">Account Settings</MudText>
+        <ManageNavMenu />
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12" lg="10">
+        @Body
+    </MudItem>
+</MudGrid>

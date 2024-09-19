@@ -1,0 +1,181 @@
+﻿@page "/Account/Register"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using PROFiLiX.Web.Data;
+@using PROFiLiX.Web.Shared.Models
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+@inject UserManager<ApplicationUser> UserManager
+@inject IUserStore<ApplicationUser> UserStore
+@inject SignInManager<ApplicationUser> SignInManager
+@inject ILogger<Register> Logger
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+@inject RoleManager<IdentityRole> RoleManager
+
+<PageTitle>Register System User</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudGrid Spacing="12" Justify="Justify.Center">
+        <MudItem md="12">
+            <StatusMessage Message="@Message" />
+            <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+                <DataAnnotationsValidator />
+
+                <MudText Typo="Typo.h5" GutterBottom="true">Register System User</MudText>
+
+                <MudGrid>
+                    <MudItem md="12" xs="12" >
+                        <MudStaticTextField For="@(() => Input.Email)" @bind-Value="Input.Email"
+                                            Label="Email" Placeholder="name@profilix.com"
+                                            UserAttributes="@(new() { { "autocomplete", "true" }, { "aria-required", "true" } } )" />
+                    </MudItem>
+
+                    <MudItem md="12" xs="12">
+                        <MudStaticTextField For="@(() => Input.Password)" @bind-Value="Input.Password"
+                                            Label="Password" InputType="InputType.Password" Placeholder="password"
+                                            UserAttributes="@(new() { { "autocomplete", "new-password" }, { "aria-required", "true" } } )" />
+                    </MudItem>
+
+                    <MudItem md="12" xs="12">
+                        <MudStaticTextField For="@(() => Input.ConfirmPassword)" @bind-Value="Input.ConfirmPassword"
+                                            Label="Confirm Password" InputType="InputType.Password" Placeholder="confirm password"
+                                            UserAttributes="@(new() { { "autocomplete", "new-password" }, { "aria-required", "true" } } )" />
+                    </MudItem>
+                    
+                    <MudItem md="12" xs="12">
+                        <MudStaticTextField For="@(() => Input.UserRole)" @bind-Value="Input.UserRole"
+                                            Label="User Role" Placeholder="1 - Reader, 2 - Helpdesk, 3 - Administrator"
+                                            />
+                    </MudItem>
+
+                    <MudItem md="12" xs="12">
+                        <MudStaticButton Variant="Variant.Filled" Color="Color.Info" FullWidth="true" FormAction="FormAction.Submit">Register</MudStaticButton>
+                    </MudItem>
+
+                </MudGrid>
+            </EditForm>
+        </MudItem>
+    </MudGrid>
+
+</MudPaper>
+
+@code {
+    private IEnumerable<IdentityError>? identityErrors;
+
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+
+    public async Task RegisterUser(EditContext editContext)
+    {
+
+        var user = CreateUser();
+        user.Email = Input.Email;
+
+        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+        var result = await UserManager.CreateAsync(user, Input.Password);
+
+        if (Input.UserRole == "1")
+        {
+            var readerRole = RoleManager.FindByNameAsync("Reader").Result;
+
+            if (readerRole != null)
+            {
+                IdentityResult roleresult = await UserManager.AddToRoleAsync(user, readerRole.Name);
+            }
+        }
+
+        if (Input.UserRole == "2")
+        {
+            var helpdeskRole = RoleManager.FindByNameAsync("HelpDesk").Result;
+
+            if (helpdeskRole != null)
+            {
+                IdentityResult roleresult = await UserManager.AddToRoleAsync(user, helpdeskRole.Name);
+            }
+        }
+
+        if (Input.UserRole == "3")
+        {
+            var adminRole = RoleManager.FindByNameAsync("Administrator").Result;
+
+            if (adminRole != null)
+            {
+                IdentityResult roleresult = await UserManager.AddToRoleAsync(user, adminRole.Name);
+            }
+        }
+
+        if (!result.Succeeded)
+        {
+            identityErrors = result.Errors;
+            return;
+        }
+
+        Logger.LogInformation("User created a new account with password.");
+
+        var userId = await UserManager.GetUserIdAsync(user);
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+
+        if (UserManager.Options.SignIn.RequireConfirmedAccount)
+        {
+            RedirectManager.RedirectTo(
+                "Account/RegisterConfirmation",
+                new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
+        }
+
+        RedirectManager.RedirectTo("/Account/UserList");
+    }
+
+    private ApplicationUser CreateUser()
+    {
+        try
+        {
+            return Activator.CreateInstance<ApplicationUser>();
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private sealed class InputModel
+    {
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; } = "";
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; } = "";
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; } = "";
+
+        [Required]
+        [Range(1, 3, ErrorMessage = "Please enter a valid number for User Role")]
+        [Display(Name = "User Role")]
+        public string UserRole { get; set; }
+    }
+}

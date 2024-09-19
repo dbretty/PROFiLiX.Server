@@ -1,0 +1,162 @@
+﻿@page "/UserProfile/User-Profile-List"
+
+@using PROFiLiX.Web.Shared.Common
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<PageTitle>User Profile List</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudText Typo="Typo.h5" Align="Align.Left" Class="px-4">
+        User Profile List
+    </MudText>
+
+    <br />
+
+    @if (pageLoaded == true)
+    {
+        <MudTable Items="@UserProfiles" Hover="true" Breakpoint="Breakpoint.Sm">
+
+            <HeaderContent>
+
+                <MudTh>
+                    <MudTooltip Text="User Name" Placement="Placement.Right">
+                            User Name
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="User Profile Directory" Placement="Placement.Right">
+                            Profile Directory
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Profile Size" Placement="Placement.Right">
+                            Size
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Temp Data Size" Placement="Placement.Right">
+                            Temp Data
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Profile Type" Placement="Placement.Right">
+                            Profile Type
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Actions" Placement="Placement.Right">
+                            
+                    </MudTooltip>
+                </MudTh>
+
+            </HeaderContent>
+
+            <RowTemplate>
+
+                <MudTd DataLabel="UserName">
+                    @context.UserName
+                </MudTd>
+
+                <MudTd DataLabel="ProfileDirectory">
+                    @context.ProfileDirectory
+                </MudTd>
+
+                <MudTd DataLabel="ProfileSize">
+                    @userProfile.FormatFileSize(context.ProfileSize)
+                </MudTd>
+
+                <MudTd DataLabel="TempSize">
+                    @userProfile.FormatFileSize(context.TempSize)
+                </MudTd>
+
+                <MudTd DataLabel="ProfileType">
+                    @context.ProfileType
+                </MudTd>
+
+                <MudTd DataLabel="Actions">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="() => Edit(context)"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" @onclick="() => Delete(context.Id)"></MudIconButton>
+                </MudTd>
+
+            </RowTemplate>
+
+            <PagerContent>
+                <MudBreakpointProvider>
+                    <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Sm" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Md" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Lg" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Xl" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Xxl" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                </MudBreakpointProvider>
+            </PagerContent>
+
+        </MudTable>
+    }
+    else
+    {
+        <PageLoading />
+    }
+
+    <br />
+
+    <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => NavigateToAddUserProfilePage()">Add User Profile</MudButton>
+
+</MudPaper>
+
+@code {
+    private List<UserProfile> UserProfiles { get; set; } = new();
+    public bool pageLoaded = false;
+    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+    private async Task LoadUserProfiles()
+    {
+        var userProfiles = await UserProfileService.GetAllUserProfilesAsync();
+        UserProfiles?.Clear();
+        if (userProfiles is null) return;
+        foreach (var userProfile in userProfiles)
+            UserProfiles.Add(userProfile);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageLoaded = false;
+        await LoadUserProfiles();
+        pageLoaded = true;
+    }
+
+    private void NavigateToAddUserProfilePage()
+	{
+		NavigationManager.NavigateTo("/UserProfile/Manage-User-Profile");
+	}
+
+	private void Edit(UserProfile model)
+	{
+		NavigationManager.NavigateTo($"/UserProfile/Manage-User-Profile/{model.Id}");
+	}
+
+	private async void Delete(int id)
+	{
+		var userProfile = await UserProfileService.DeleteUserProfileAsync(id);
+		NavigationManager.NavigateTo(NavigationManager.Uri, true);
+	}
+}

@@ -1,0 +1,100 @@
+﻿@implements IDisposable
+
+@inject NavigationManager NavigationManager
+
+<MudNavMenu Dense="true" Bordered="true" Color="Color.Info">
+
+    <MudText Typo="Typo.h6" Class="px-4">Navigation</MudText>
+    <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">General</MudText>
+    <MudDivider Class="my-2" />
+
+    <MudNavLink Match="NavLinkMatch.All" Href="/" Icon="@Icons.Material.Outlined.Dashboard">
+        Dashboard
+    </MudNavLink>
+
+    <MudNavLink Icon="@Icons.Material.Outlined.Assessment" Href="/UserProfileDetail">
+        User Profile Overview
+    </MudNavLink>
+
+    <MudNavLink Icon="@Icons.Material.Outlined.Task" Href="/TaskDetail">
+        Task Overview
+    </MudNavLink>
+ 
+    <AuthorizeView>
+        <Authorized>
+            <MudDivider Class="my-2" />
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Helpdesk</MudText>
+
+            <MudNavLink Icon="@Icons.Material.Filled.HelpOutline" Href="/Helpdesk">
+                Profile Actions
+            </MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView>
+        <Authorized>
+            <MudDivider Class="my-2" />
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Api</MudText>
+
+            <MudNavLink Icon="@Icons.Material.Outlined.Api" Href="/Swagger" target="blank">
+                Swagger
+            </MudNavLink>
+            <MudNavLink Icon="@Icons.Material.Outlined.DocumentScanner" Href="/Redoc" target="blank">
+                ReDoc
+            </MudNavLink>
+        </Authorized>
+    </AuthorizeView>
+
+    <AuthorizeView>
+        <Authorized>
+            <MudDivider Class="my-2" />
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">System Users</MudText>
+
+            <MudNavLink Href="Account/Register" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Outlined.PersonAdd">Add User</MudNavLink>
+            <MudNavLink Href="Account/UserList" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Outlined.FormatListBulleted">User List</MudNavLink>
+            
+            <MudDivider Class="my-2" />
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Manage Account</MudText>
+
+            <MudNavLink Href="Account/Manage" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Outlined.Person">@context.User.Identity?.Name</MudNavLink>
+            <form action="Account/Logout" method="post">
+                <AntiforgeryToken />
+                <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                <button type="submit" class="mud-nav-link mud-ripple">
+                    <MudIcon Icon="@Icons.Material.Outlined.Logout" Color="Color.Info" Class="mr-3"></MudIcon> Logout
+                </button>
+            </form>
+        </Authorized>
+        <NotAuthorized>
+            <MudDivider Class="my-2" />
+            <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Authenticate</MudText>
+
+            <MudNavLink Href="Account/Login" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Outlined.Password">Login</MudNavLink>
+        </NotAuthorized>
+    </AuthorizeView>
+
+</MudNavMenu>
+
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
+
+

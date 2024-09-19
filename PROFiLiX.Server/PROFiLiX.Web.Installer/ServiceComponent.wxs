@@ -1,0 +1,13 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <ComponentGroup Id="ServiceComponent" Directory="INSTALLFOLDER" >
+      <Component Id='WindowsServicesComponent'>
+        <File Source="..\PROFiLiX.Web\bin\Release\net8.0\publish\PROFiLiX.Web.exe" />
+		  <ServiceInstall Name="PROFiLiX.Web" DisplayName="PROFiLiX Web Server" 
+						  Description="PROFiLiX Web Server component to centrally manage your client deployment"
+						  Type="ownProcess" Start="auto" ErrorControl="normal"  />
+		  <ServiceControl Name="PROFiLiX.Web" Start="install" Stop="both" Remove="uninstall" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,61 @@
+﻿@page "/Account/UserList"
+@attribute [Authorize]
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using PROFiLiX.Web.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.WebUtilities
+@using PROFiLiX.Web.Shared.Models
+
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+@inject NavigationManager NavigationManager
+@inject ProfileDataRepository profileDataRepository
+
+<PageTitle>System User List</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudText Typo="Typo.h5" GutterBottom="true">System User List</MudText>
+
+    <MudGrid Spacing="12" Justify="Justify.Center">
+        <MudItem md="12">
+            <MudDataGrid Items="@userInformation" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+                <Columns>
+                    <PropertyColumn Property="x => x.Id" Title="Guid" />
+                    <PropertyColumn Property="x => x.UserName" Title="User Name" />
+                    <PropertyColumn Property="x => x.Email" Title="EMail Address" />
+                </Columns>
+            </MudDataGrid>
+        </MudItem>
+    </MudGrid>
+
+    <br />
+
+    <MudNavLink Href="Account/Register" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Outlined.PersonAdd">Add User</MudNavLink>
+
+</MudPaper>
+
+
+@code {
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private UserManager<ApplicationUser> userManager;
+    private RoleManager<IdentityRole> roleManager;
+    private List<ApplicationUser> userInformation = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        userManager = UserManager;
+        roleManager = RoleManager;
+        userInformation = userManager.Users.ToList();
+
+    }
+}

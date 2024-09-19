@@ -1,0 +1,263 @@
+﻿@page "/HelpDesk"
+
+<PageTitle>HelpDesk</PageTitle>
+@using System.ComponentModel.DataAnnotations
+@using PROFiLiX.Web.Shared.Models.Enum
+@using Microsoft.AspNetCore.SignalR.Client
+@using PROFiLiX.Web.Shared.Common
+@using Microsoft.AspNetCore.Authorization
+
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider GetAuthenticationStateAsync
+@inject ISnackbar Snackbar
+
+@attribute [Authorize]
+
+<PageTitle>Profile Actions</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudText Typo="Typo.h5" Align="Align.Left" Class="px-4">
+        Profile Actions (Active Users)
+    </MudText>
+
+    <br />
+
+    <MudText Typo="Typo.body1" Align="Align.Left" Class="px-4">
+        Below you will see a list of active users that you can perform administrative actions on. You will see a notification that the action has started and you can monitor the progress of the action in the <MudLink Href="/TaskDetail">Task Overview</MudLink> page.
+    </MudText>
+
+    <br />
+
+    @if (pageLoaded == true)
+    {
+        <MudTable Items="@UserProfiles" Hover="true" FixedHeader="true" FixedFooter="true" Filter="new Func<UserProfile,bool>(FilterFunc1)">
+
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Active User List</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Outlined.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+
+            <HeaderContent>
+
+                <MudTh>
+                    <MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<UserProfile, object>(x=>x.UserName)">
+                        <MudTooltip Text="User Name" Placement="Placement.Right">
+                            User Name
+                        </MudTooltip>
+                    </MudTableSortLabel>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Profile Size" Placement="Placement.Right">
+                        Size
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Profile Type" Placement="Placement.Right">
+                        Profile Type
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Actions" Placement="Placement.Right">
+                        Available Actions
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Execute" Placement="Placement.Right">
+                        
+                    </MudTooltip>
+                </MudTh>
+
+            </HeaderContent>
+
+            <RowTemplate>
+
+                <MudTd DataLabel="UserName">
+                    @context.UserName
+                </MudTd>
+
+                <MudTd DataLabel="ProfileSize">
+                    @userProfile.FormatFileSize(context.ProfileSize)
+                </MudTd>
+
+                <MudTd DataLabel="ProfileType">
+                    @context.ProfileType
+                </MudTd>
+
+                <MudTd DataLabel="Actions" Style="text-align:right">
+                    <MudSelect T="ClientAction" @bind-Value="clientAction" ToStringFunc="@converter" Placeholder="Select Action" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Text" Dense="true">
+                        <MudSelectItem Value="@(new ClientAction() { Name="Clear Temp Files"})" />
+                        <MudSelectItem Value="@(new ClientAction() { Name="Reset Microsoft Edge"})" />
+                        <MudSelectItem Value="@(new ClientAction() { Name="Reset Google Chrome"})" />
+                        <MudSelectItem Value="@(new ClientAction() { Name="Reset Mozilla Firefox"})" />
+                        <MudSelectItem Value="@(new ClientAction() { Name="Reset Teams Classic"})" />
+                        <MudSelectItem Value="@(new ClientAction() { Name="Reset Teams"})" />
+                    </MudSelect>
+                </MudTd>
+
+                <MudTd DataLabel="Execute" Style="text-align:left">
+                    <MudButton Variant="Variant.Filled" Color="Color.Info" @onclick="() => ExecuteClientAction(context, adminUserName, clientAction)">Execute</MudButton>
+                </MudTd>
+
+            </RowTemplate>
+
+            <PagerContent>
+                <MudBreakpointProvider>
+                    <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Sm" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Md" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Lg" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Xl" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Xxl" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                </MudBreakpointProvider>
+            </PagerContent>
+
+        </MudTable>
+    }
+    else
+    {
+        <PageLoading />
+    }
+
+</MudPaper>
+
+@code {
+
+    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+    private List<UserProfile> UserProfiles { get; set; } = new();
+    ClientAction clientAction = new ClientAction { Name = "Select Action" };
+
+    private string adminUserName = string.Empty;
+    private HubConnection? hubConnection;
+    public bool pageLoaded = false;
+    private string searchString1 = "";
+
+    private async void GetUserName()
+    {
+        var authenticationState = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var loggedOnUser = authenticationState.User;
+        adminUserName = loggedOnUser.Identity.Name;
+    }
+
+    private async Task LoadUserProfiles()
+    {
+        var userProfiles = await UserProfileService.GetAllUserProfilesAsync();
+        UserProfiles?.Clear();
+        if (userProfiles is null) return;
+        foreach (var userProfile in userProfiles)
+        {
+            if (userProfile.ActiveStatus)
+            {
+                UserProfiles.Add(userProfile);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/EUCProfileBuddyHub"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        await hubConnection.StartAsync();
+
+        GetUserName();
+        await LoadUserProfiles();
+        pageLoaded = true;
+    }
+
+    public class ClientAction
+    {
+        public string Name { get; set; }
+    }
+
+    Func<ClientAction,string> converter = p => p?.Name;
+
+    private async Task ExecuteClientAction(UserProfile context, string adminUserName, ClientAction clientAction)
+    {
+        var Id = context.Id;
+        var destinationUserProfile = await UserProfileService.GetUserProfileByIdAsync(Id);
+
+        EUCProfileBuddyTask task = new EUCProfileBuddyTask();
+        task.TaskName = $"{adminUserName} initiated {clientAction.Name} for {context.UserName}";
+        task.UserName = adminUserName;
+        task.TaskState = EUCTaskState.Running;
+        var result = await EUCProfileBuddyTaskService.AddEUCProfileBuddyTaskAsync(task);
+
+        bool executedAction = false;
+
+        switch (clientAction.Name)
+        {
+            case "Clear Temp Files":
+                hubConnection.SendAsync("SendMessageToClient", "ClearTempFiles", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                executedAction = true;
+                break;
+            case "Reset Microsoft Edge":
+                hubConnection.SendAsync("SendMessageToClient", "ResetEdge", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                executedAction = true;
+                break;
+            case "Reset Google Chrome":
+                hubConnection.SendAsync("SendMessageToClient", "ResetChrome", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                executedAction = true;
+                break;
+            case "Reset Mozilla Firefox":
+                hubConnection.SendAsync("SendMessageToClient", "ResetFirefox", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                executedAction = true;
+                break;
+            case "Reset Teams Classic":
+                hubConnection.SendAsync("SendMessageToClient", "ResetTeamsClassic", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                executedAction = true;
+                break;
+            case "Reset Teams":
+                hubConnection.SendAsync("SendMessageToClient", "ResetTeams", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                executedAction = true; 
+                break;
+            default:
+                break;
+        }
+
+        if(executedAction == true)
+        {
+            Snackbar.Add(
+            @<div>
+                <h3>PROFiLiX Action Executed</h3>
+                <ul>
+                    <li>@adminUserName initiated</li>
+                    <li><strong>@clientAction.Name</strong></li>
+                    <li>on the Endpoint registered by @context.UserName</li>
+                </ul>
+            </div>
+                );
+        }
+      
+    }
+
+    private bool FilterFunc1(UserProfile userProfile) => FilterFunc(userProfile, searchString1);
+
+    private bool FilterFunc(UserProfile userProfile, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (userProfile.UserName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+}

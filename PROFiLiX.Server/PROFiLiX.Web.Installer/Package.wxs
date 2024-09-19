@@ -1,0 +1,70 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui" >
+
+	<?define InfoURL="https://bretty.me.uk/" ?>
+	
+		<Package Name="PROFiLiX Web Server" Manufacturer="bretty.me.uk" Version="2.0.0.0" UpgradeCode="927d10c1-9df5-441e-bd9d-aa124a38859c">
+
+
+			<Icon Id="icon.ico" SourceFile="..\PROFiLiX.Web.Installer\Icon\profilix.ico"/>
+			<Property Id="ARPPRODUCTICON" Value="icon.ico" />
+			<Property Id="ARPHELPLINK" Value="$(var.InfoURL)" />
+			<Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
+	  
+			<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" AllowSameVersionUpgrades="yes" />
+	  
+			<MediaTemplate EmbedCab="yes" />
+
+			<WixVariable Id="WixUILicenseRtf" Value="eucpbs.rtf" />
+			<WixVariable Id="WixUIBannerBmp" Value="Images\Banner.bmp" />
+			<WixVariable Id="WixUIDialogBmp" Value="Images\Background.bmp" />
+
+
+			<ui:WixUI
+				Id="WixUI_InstallDir"
+				InstallDirectory="INSTALLFOLDER"
+			/>
+			
+			<Feature Id="Main">
+				<Files Include="..\PROFiLiX.Web\bin\Release\net8.0\publish\**">
+					<Exclude Files="..\PROFiLiX.Web\bin\Release\net8.0\publish\Profile.Data.Repository.db" />
+					<Exclude Files="..\PROFiLiX.Web\bin\Release\net8.0\publish\Profile.Data.Repository.db-shm" />
+					<Exclude Files="..\PROFiLiX.Web\bin\Release\net8.0\publish\Profile.Data.Repository.db-wal" />
+				</Files>
+				<ComponentRef Id="PROFiLiXServerDesktop" />
+				<ComponentRef Id="PROFiLiXServerStart" />
+				<ComponentRef Id="PROFiLiXServerAutoStart" />
+			</Feature>
+
+			<Component Id="PROFiLiXServerDesktop" Guid="c400d066-09f7-4199-b035-4ab85bdb6893" Directory="DesktopFolder" >
+				<Shortcut Id="PROFiLiXServerDesktopShortcut"
+						  Name="PROFiLiX Server"
+						  Description="PROFiLiX Server."
+						  Directory="DesktopFolder"
+						  Target="[INSTALLFOLDER]PROFiLiX.Web.exe"
+						  WorkingDirectory="INSTALLFOLDER"
+						  Icon="icon.ico" />
+				<RegistryValue Root="HKCU" Key="Software\PROFiLiX.Server\GUI" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+
+			<Component Id="PROFiLiXServerStart" Guid="2560215d-7875-4056-84c1-017794857280" Directory="ProgramMenuFolder" >
+				<Shortcut Id="PROFiLiXServerStartShortcut"
+						  Name="PROFiLiX Server"
+						  Description="PROFiLiX Server."
+						  Directory="ProgramMenuFolder"
+						  Target="[INSTALLFOLDER]PROFiLiX.Web.exe"
+						  WorkingDirectory="INSTALLFOLDER"
+						  Icon="icon.ico" />
+				<RegistryValue Root="HKCU" Key="Software\PROFiLiX.Server\GUI" Name="installedStart" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+
+			<Component Id="PROFiLiXServerAutoStart" Guid="325f7169-c633-46bf-a21e-6446dbac137a">
+				<RegistryValue Id="MerAs.rst" Root="HKCU" Action="write"
+							   Key="Software\Microsoft\Windows\CurrentVersion\Run"
+							   Name="PROFiLiX Server"
+							   Value="[INSTALLFOLDER]PROFiLiX.Web.exe"
+							   Type="string" />
+			</Component>
+	
+  </Package>
+	
+</Wix>

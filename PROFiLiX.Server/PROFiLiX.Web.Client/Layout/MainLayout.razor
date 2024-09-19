@@ -1,0 +1,47 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+
+    <MudAppBar Elevation="2" Dense="false" Color="Color.Dark">
+
+        <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Info" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudImage Fluid="true" Width="200" Height="150" Src="images/logo.png" Alt="Profilix Logo" />
+
+        <MudSpacer />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+
+        <NavMenu />
+
+    </MudDrawer>
+
+    <MudMainContent Class="mt-16 pa-4">
+        @Body
+    </MudMainContent>
+
+</MudLayout>
+
+
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+}
+
+
