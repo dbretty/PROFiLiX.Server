@@ -117,7 +117,7 @@
 
     @if (pageLoaded == true)
     {
-        <MudTable Items="@EUCProfileBuddyTasks" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true" FixedFooter="true" Filter="new Func<EUCProfileBuddyTask,bool>(FilterFunc1)">
+        <MudTable Items="@EUCProfileBuddyTasks" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true" FixedFooter="true" Filter="new Func<ProfilixTask,bool>(FilterFunc1)">
 
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Task List</MudText>
@@ -128,7 +128,7 @@
             <HeaderContent>
 
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<EUCProfileBuddyTask, object>(x=>x.UserName)">
+                    <MudTableSortLabel SortBy="new Func<ProfilixTask, object>(x=>x.UserName)">
                         <MudTooltip Text="The User Who Started the Task" Placement="Placement.Right">
                                 User Name
                         </MudTooltip>
@@ -136,7 +136,7 @@
                 </MudTh>
 
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<EUCProfileBuddyTask, object>(x=>x.TaskName)">
+                    <MudTableSortLabel SortBy="new Func<ProfilixTask, object>(x=>x.TaskName)">
                         <MudTooltip Text="The Task Description Send by PROFiLiX" Placement="Placement.Right">
                                 Task Description
                         </MudTooltip>
@@ -144,7 +144,7 @@
                 </MudTh>
 
                 <MudTh>
-                    <MudTableSortLabel InitialDirection="SortDirection.Descending" SortBy="new Func<EUCProfileBuddyTask, object>(x=>x.TaskExecuted)">
+                    <MudTableSortLabel InitialDirection="SortDirection.Descending" SortBy="new Func<ProfilixTask, object>(x=>x.TaskExecuted)">
                         <MudTooltip Text="The Task Start Time">
                                 Started
                         </MudTooltip>
@@ -152,7 +152,7 @@
                 </MudTh>
 
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<EUCProfileBuddyTask, object>(x=>x.TaskRunTime)">
+                    <MudTableSortLabel SortBy="new Func<ProfilixTask, object>(x=>x.TaskRunTime)">
                         <MudTooltip Text="The Running Time for the Task" Placement="Placement.Right">
                                 Run Time
                         </MudTooltip>
@@ -160,7 +160,7 @@
                 </MudTh>
 
                 <MudTh>
-                    <MudTableSortLabel SortBy="new Func<EUCProfileBuddyTask, object>(x=>x.TaskState)">
+                    <MudTableSortLabel SortBy="new Func<ProfilixTask, object>(x=>x.TaskState)">
                         <MudTooltip Text="The Task Status" Placement="Placement.Right">
                                 State
                         </MudTooltip>
@@ -188,22 +188,22 @@
                 </MudTd>
 
                 <MudTd DataLabel="TaskState">
-                    @if (context.TaskState == EUCTaskState.Completed)
+                    @if (context.TaskState == ProfilixTaskState.Completed)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.Recommend" Title="Task Completed" Size="Size.Large" Color="Color.Success" />
                     }
 
-                    @if (context.TaskState == EUCTaskState.Unknown)
+                    @if (context.TaskState == ProfilixTaskState.Unknown)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.QuestionMark" Title="Unknown State" Size="Size.Large" Color="Color.Dark" />
                     }
 
-                    @if (context.TaskState == EUCTaskState.Running)
+                    @if (context.TaskState == ProfilixTaskState.Running)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.RunCircle" Title="Task Running" Size="Size.Large" Color="Color.Info" />
                     }
 
-                    @if (context.TaskState == EUCTaskState.Errored)
+                    @if (context.TaskState == ProfilixTaskState.Errored)
                     {
                         <MudIcon Icon="@Icons.Material.Outlined.Error" Title="Task Error" Size="Size.Large" Color="Color.Error" />
                     }
@@ -252,11 +252,11 @@
     public bool pageLoaded = false;
     private string searchString1 = "";
 
-    private List<EUCProfileBuddyTask> EUCProfileBuddyTasks { get; set; } = new();
+    private List<ProfilixTask> EUCProfileBuddyTasks { get; set; } = new();
 
     private async Task LoadTasks()
     {
-        List<EUCProfileBuddyTask> tasks = await EUCProfileBuddyTaskService.GetAllEUCProfileBuddyTasksAsync();
+        List<ProfilixTask> tasks = await EUCProfileBuddyTaskService.GetAllProfilixTasksAsync();
        
         EUCProfileBuddyTasks?.Clear();
         if (tasks is null) return;
@@ -268,17 +268,17 @@
     {
         await LoadTasks();
 
-        completedTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == EUCTaskState.Completed).Count();
-        runningTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == EUCTaskState.Running).Count();
-        erroredTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == EUCTaskState.Errored).Count();
-        unknownTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == EUCTaskState.Unknown).Count();
+        completedTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Completed).Count();
+        runningTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Running).Count();
+        erroredTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Errored).Count();
+        unknownTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Unknown).Count();
 
         pageLoaded = true;
     }
 
-    private bool FilterFunc1(EUCProfileBuddyTask task) => FilterFunc(task, searchString1);
+    private bool FilterFunc1(ProfilixTask task) => FilterFunc(task, searchString1);
 
-    private bool FilterFunc(EUCProfileBuddyTask task, string searchString)
+    private bool FilterFunc(ProfilixTask task, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;

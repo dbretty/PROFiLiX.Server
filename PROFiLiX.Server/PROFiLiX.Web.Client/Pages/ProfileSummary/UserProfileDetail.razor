@@ -426,7 +426,7 @@
 </MudPaper>
 
 @code {
-    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+    public IProfilixUserProfile userProfile = new ProfilixUserProfile();
 
     public int totalProfiles;
     public string totalProfileSize = string.Empty;
@@ -458,11 +458,11 @@
         totalProfileSize = userProfile.FormatFileSize(userProfile.TotalProfileSize(UserProfiles));
         totalTempSize = userProfile.FormatFileSize(userProfile.TotalTempSize(UserProfiles));
 
-        localProfiles = UserProfiles.Where(x => x.ProfileType == EUCProfileType.Local).Count();
-        fsLogixProfiles = UserProfiles.Where(x => x.ProfileType == EUCProfileType.FSLogix).Count();
-        cpmProfiles = UserProfiles.Where(x => x.ProfileType == EUCProfileType.CitrixProfileManager).Count();
-        unknownProfiles = UserProfiles.Where(x => x.ProfileType == EUCProfileType.Unknown).Count();
-        liquidwareProfiles = UserProfiles.Where(x => x.ProfileType == EUCProfileType.Liquidware).Count();
+        localProfiles = UserProfiles.Where(x => x.ProfileType == ProfileType.Local).Count();
+        fsLogixProfiles = UserProfiles.Where(x => x.ProfileType == ProfileType.FSLogix).Count();
+        cpmProfiles = UserProfiles.Where(x => x.ProfileType == ProfileType.CitrixProfileManager).Count();
+        unknownProfiles = UserProfiles.Where(x => x.ProfileType == ProfileType.Unknown).Count();
+        liquidwareProfiles = UserProfiles.Where(x => x.ProfileType == ProfileType.Liquidware).Count();
         pageLoaded = true;
     }
 

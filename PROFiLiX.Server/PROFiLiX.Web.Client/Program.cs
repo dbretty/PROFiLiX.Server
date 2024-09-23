@@ -2,7 +2,7 @@
 
 using PROFiLiX.Web.Client;
 using PROFiLiX.Web.Client.Services;
-using PROFiLiX.Web.Shared.EUCProfileBuddyTaskRepositories;
+using PROFiLiX.Web.Shared.ProfilixTaskRepositories;
 using PROFiLiX.Web.Shared.UserProfileRepositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -18,6 +18,6 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 
 builder.Services.AddScoped<IUserProfileRepository, UserProfileService>();
-builder.Services.AddScoped<IEUCProfileBuddyTaskRepository, EUCProfileBuddyTaskService>();
+builder.Services.AddScoped<IProfilixTaskRepository, ProfilixTaskService>();
 
 await builder.Build().RunAsync();

@@ -1,4 +1,4 @@
-﻿// <copyright file="EUCTaskState.cs" company="bretty.me.uk">
+﻿// <copyright file="ProfilixTaskState.cs" company="bretty.me.uk">
 // Copyright (c) bretty.me.uk. All rights reserved.
 // </copyright>
 
@@ -7,7 +7,7 @@ namespace PROFiLiX.Web.Shared.Models.Enum
     /// <summary>
 	/// Enum to hold the task status.
 	/// </summary>
-	public enum EUCTaskState
+	public enum ProfilixTaskState
     {
         /// <summary>
         /// Unknown Status.

@@ -1,4 +1,4 @@
-﻿// <copyright file="IEUCWebUserProfile.cs" company="bretty.me.uk">
+﻿// <copyright file="IProfilixUserProfile.cs" company="bretty.me.uk">
 // Copyright (c) bretty.me.uk. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,7 @@ namespace PROFiLiX.Web.Shared.Common
     /// <summary>
 	/// Interface to manage common code for EUC Ewb Tier.
 	/// </summary>
-    public interface IEUCWebUserProfile
+    public interface IProfilixUserProfile
     {
         /// <summary>
         /// Formats the size passed in.

@@ -377,9 +377,9 @@
 
 @code {
 
-    private List<EUCProfileBuddyTask> taskInformation = [];
+    private List<ProfilixTask> taskInformation = [];
     private List<PROFiLiX.Web.Shared.Models.UserProfile> profileInformation = [];
-    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+    public IProfilixUserProfile userProfile = new ProfilixUserProfile();
 
     public int completedTasks;
     public int runningTasks;
@@ -402,12 +402,12 @@
     protected override async Task OnInitializedAsync()
     {
 
-        var taskInformation = await EUCProfileBuddyTaskService.GetAllEUCProfileBuddyTasksAsync();
+        var taskInformation = await EUCProfileBuddyTaskService.GetAllProfilixTasksAsync();
 
-        completedTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Completed).Count();
-        runningTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Running).Count();
-        erroredTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Errored).Count();
-        unknownTasks = taskInformation.Where(x => x.TaskState == EUCTaskState.Unknown).Count();
+        completedTasks = taskInformation.Where(x => x.TaskState == ProfilixTaskState.Completed).Count();
+        runningTasks = taskInformation.Where(x => x.TaskState == ProfilixTaskState.Running).Count();
+        erroredTasks = taskInformation.Where(x => x.TaskState == ProfilixTaskState.Errored).Count();
+        unknownTasks = taskInformation.Where(x => x.TaskState == ProfilixTaskState.Unknown).Count();
 
         var profileInformation = await UserProfileService.GetAllUserProfilesAsync();
 
@@ -415,11 +415,11 @@
         totalProfileSize = userProfile.FormatFileSize(userProfile.TotalProfileSize(profileInformation));
         totalTempSize = userProfile.FormatFileSize(userProfile.TotalTempSize(profileInformation));
 
-        localProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.Local).Count();
-        fsLogixProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.FSLogix).Count();
-        cpmProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.CitrixProfileManager).Count();
-        unknownProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.Unknown).Count();
-        liquidwareProfiles = profileInformation.Where(x => x.ProfileType == EUCProfileType.Liquidware).Count();
+        localProfiles = profileInformation.Where(x => x.ProfileType == ProfileType.Local).Count();
+        fsLogixProfiles = profileInformation.Where(x => x.ProfileType == ProfileType.FSLogix).Count();
+        cpmProfiles = profileInformation.Where(x => x.ProfileType == ProfileType.CitrixProfileManager).Count();
+        unknownProfiles = profileInformation.Where(x => x.ProfileType == ProfileType.Unknown).Count();
+        liquidwareProfiles = profileInformation.Where(x => x.ProfileType == ProfileType.Liquidware).Count();
 
         double[] profilebd = { cpmProfiles, fsLogixProfiles, liquidwareProfiles, localProfiles, unknownProfiles };
         string[] profilelbl = { "Citrix", "FSLogix", "ProfileUnity", "Local", "Unknown" };

@@ -43,7 +43,7 @@ namespace PROFiLiX.Web.Shared.Models
 		/// <summary>
 		/// Gets or sets the profile type.
 		/// </summary>
-		public EUCProfileType ProfileType { get; set; } = EUCProfileType.Local;
+		public ProfileType ProfileType { get; set; } = ProfileType.Local;
 
 		/// <summary>
 		/// Gets or sets the last updated time of this entity.

@@ -25,7 +25,7 @@ namespace PROFiLiX.Web.Data
         /// <summary>
         /// Gets or sets the Task Information.
         /// </summary>
-        public DbSet<EUCProfileBuddyTask> EUCProfileBuddyTask { get; set; }
+        public DbSet<ProfilixTask> ProfilixTask { get; set; }
 
 		/// <summary>
 		/// Gets or sets the User Profile Table.

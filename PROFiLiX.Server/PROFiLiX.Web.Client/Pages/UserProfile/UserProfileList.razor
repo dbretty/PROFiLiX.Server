@@ -127,7 +127,7 @@
 @code {
     private List<UserProfile> UserProfiles { get; set; } = new();
     public bool pageLoaded = false;
-    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+    public IProfilixUserProfile userProfile = new ProfilixUserProfile();
     private async Task LoadUserProfiles()
     {
         var userProfiles = await UserProfileService.GetAllUserProfilesAsync();

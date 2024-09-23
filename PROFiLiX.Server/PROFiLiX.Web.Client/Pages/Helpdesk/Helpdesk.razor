@@ -140,7 +140,7 @@
 
 @code {
 
-    public IEUCWebUserProfile userProfile = new EUCWebUserProfile();
+    public IProfilixUserProfile userProfile = new ProfilixUserProfile();
     private List<UserProfile> UserProfiles { get; set; } = new();
     ClientAction clientAction = new ClientAction { Name = "Select Action" };
 
@@ -173,7 +173,7 @@
     protected override async Task OnInitializedAsync()
     {
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/EUCProfileBuddyHub"))
+            .WithUrl(NavigationManager.ToAbsoluteUri("/ProfilixHub"))
             .WithAutomaticReconnect()
             .Build();
 
@@ -196,11 +196,11 @@
         var Id = context.Id;
         var destinationUserProfile = await UserProfileService.GetUserProfileByIdAsync(Id);
 
-        EUCProfileBuddyTask task = new EUCProfileBuddyTask();
+        ProfilixTask task = new ProfilixTask();
         task.TaskName = $"{adminUserName} initiated {clientAction.Name} for {context.UserName}";
         task.UserName = adminUserName;
-        task.TaskState = EUCTaskState.Running;
-        var result = await EUCProfileBuddyTaskService.AddEUCProfileBuddyTaskAsync(task);
+        task.TaskState = ProfilixTaskState.Running;
+        var result = await EUCProfileBuddyTaskService.AddProfilixTaskAsync(task);
 
         bool executedAction = false;
 

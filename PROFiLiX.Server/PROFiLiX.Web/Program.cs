@@ -5,7 +5,7 @@ using PROFiLiX.Web.Data;
 using PROFiLiX.Web.Data.Initialize;
 using PROFiLiX.Web.Hubs;
 using PROFiLiX.Web.Implementations;
-using PROFiLiX.Web.Shared.EUCProfileBuddyTaskRepositories;
+using PROFiLiX.Web.Shared.ProfilixTaskRepositories;
 using PROFiLiX.Web.Shared.Models;
 using PROFiLiX.Web.Shared.UserProfileRepositories;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -56,7 +56,7 @@ builder.Services.AddDbContext<ProfileDataRepository>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
-builder.Services.AddScoped<IEUCProfileBuddyTaskRepository, EUCProfileBuddyTaskRepository>();
+builder.Services.AddScoped<IProfilixTaskRepository, ProfilixTaskRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAddress").Value!)
@@ -84,8 +84,8 @@ builder.Services.AddOpenApiDocument(options =>
         document.Info = new OpenApiInfo
         {
             Version = "v1",
-            Title = "EUC Profile Buddy API",
-            Description = "API documentation for EUC Profile Buddy services.",
+            Title = "PROFiLiX Server API",
+            Description = "API documentation for PROFiLiX Server services.",
             TermsOfService = "https://bretty.me.uk/terms",
             Contact = new OpenApiContact
             {
@@ -125,7 +125,7 @@ else
 
 app.UseStaticFiles();
 
-app.MapHub<EUCProfileBuddyHub>("/EUCProfileBuddyHub");
+app.MapHub<ProfilixHub>("/ProfilixHub");
 
 app.UseAuthentication();
 app.UseAuthorization();

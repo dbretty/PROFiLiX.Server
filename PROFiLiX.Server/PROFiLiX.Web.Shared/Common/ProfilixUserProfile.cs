@@ -1,4 +1,4 @@
-﻿// <copyright file="EUCWebUserProfile.cs" company="bretty.me.uk">
+﻿// <copyright file="ProfilixUserProfile.cs" company="bretty.me.uk">
 // Copyright (c) bretty.me.uk. All rights reserved.
 // </copyright>
 
@@ -9,7 +9,7 @@ namespace PROFiLiX.Web.Shared.Common
     /// <summary>
 	/// Class to manage common code for EUC Ewb Tier.
 	/// </summary>
-    public class EUCWebUserProfile : IEUCWebUserProfile
+    public class ProfilixUserProfile : IProfilixUserProfile
     {
         /// <inheritdoc/>
         public int TotalProfiles(List<UserProfile> profiles)

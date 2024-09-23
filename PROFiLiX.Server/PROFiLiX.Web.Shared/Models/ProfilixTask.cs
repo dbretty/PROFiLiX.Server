@@ -1,4 +1,4 @@
-﻿// <copyright file="EUCProfileBuddyTask.cs" company="bretty.me.uk">
+﻿// <copyright file="ProfilixTask.cs" company="bretty.me.uk">
 // Copyright (c) bretty.me.uk. All rights reserved.
 // </copyright>
 
@@ -10,7 +10,7 @@ namespace PROFiLiX.Web.Shared.Models
 	/// <summary>
 	/// Class for the EUC Profile Buddy Task model.
 	/// </summary>
-	public class EUCProfileBuddyTask
+	public class ProfilixTask
 	{
 		/// <summary>
 		/// Gets or sets the Id.
@@ -36,7 +36,7 @@ namespace PROFiLiX.Web.Shared.Models
 		/// <summary>
 		/// Gets or sets the task state.
 		/// </summary>
-		public EUCTaskState TaskState { get; set; }
+		public ProfilixTaskState TaskState { get; set; }
 
 		/// <summary>
 		/// Gets or sets the task run time.

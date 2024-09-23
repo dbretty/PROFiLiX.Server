@@ -1,4 +1,4 @@
-﻿// <copyright file="EUCProfileType.cs" company="bretty.me.uk">
+﻿// <copyright file="ProfileType.cs" company="bretty.me.uk">
 // Copyright (c) bretty.me.uk. All rights reserved.
 // </copyright>
 
@@ -7,7 +7,7 @@ namespace PROFiLiX.Web.Shared.Models.Enum
 	/// <summary>
 	/// Enum to hold the profile type.
 	/// </summary>
-	public enum EUCProfileType
+	public enum ProfileType
 	{
 		/// <summary>
 		/// Unknown profile type.

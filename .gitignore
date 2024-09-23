@@ -399,3 +399,5 @@ FodyWeavers.xsd
 PROFiLiX.Server/PROFiLiX.Web/.config/dotnet-tools.json
 /PROFiLiX.Server/PROFiLiX.Web/Migrations
 PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db
+PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db-shm
+PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db-wal

@@ -5,7 +5,7 @@
 namespace PROFiLiX.Web.Hubs
 {
     using PROFiLiX.Web.Client.Services;
-    using PROFiLiX.Web.Shared.EUCProfileBuddyTaskRepositories;
+    using PROFiLiX.Web.Shared.ProfilixTaskRepositories;
     using PROFiLiX.Web.Shared.Models;
     using PROFiLiX.Web.Shared.Models.Enum;
     using Microsoft.AspNetCore.SignalR;
@@ -14,7 +14,7 @@ namespace PROFiLiX.Web.Hubs
     /// <summary>
     /// Class to Initialize the SignalR Hub.
     /// </summary>
-    public class EUCProfileBuddyHub : Hub
+    public class ProfilixHub : Hub
     {
 
         /// <summary>
@@ -39,12 +39,12 @@ namespace PROFiLiX.Web.Hubs
             {
                 BaseAddress = new Uri("http://localhost:5120"),
             };
-            IEUCProfileBuddyTaskRepository taskService = new EUCProfileBuddyTaskService(http);
+            IProfilixTaskRepository taskService = new ProfilixTaskService(http);
            
-            var runningTask = await taskService.GetEUCProfileBuddyTaskByIdAsync(taskId);
-            runningTask.TaskState = EUCTaskState.Completed;
+            var runningTask = await taskService.GetProfilixTaskByIdAsync(taskId);
+            runningTask.TaskState = ProfilixTaskState.Completed;
 
-            taskService.UpdateEUCProfileBuddyTaskAsync(runningTask);
+            taskService.UpdateProfilixTaskAsync(runningTask);
         }
     }
 }

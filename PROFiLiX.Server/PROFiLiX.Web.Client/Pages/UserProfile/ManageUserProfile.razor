@@ -48,7 +48,7 @@
 					<MudItem md="12" xs="12">
 						<MudText Typo="Typo.body1">Profile Type</MudText>
 						<MudSelect @bind-Value="UserProfileModel.ProfileType">
-							@foreach (var margin in Enum.GetValues(typeof(EUCProfileType)).Cast<EUCProfileType>())
+							@foreach (var margin in Enum.GetValues(typeof(ProfileType)).Cast<ProfileType>())
 							{
 								<MudSelectItem Value="margin">@margin</MudSelectItem>
 							}
