@@ -7,6 +7,6 @@ Blazor web application to centrally manage your PROFiLiX Client deployment. Incl
 
 Gives you as an administrator the ability to centrally monitor your deployment of PROFiLiX. Has options for tasks executed as well as profile overview. It also has a full Swagger and ReDoc Api available.
 
-![](/Images/PROFiLiX.Server.Server.png)
+![](/Images/PROFiLiX.Server.png)
 
 For full information and documentation please visit [https://bretty.me.uk/projects/PROFiLiX-Server/](https://bretty.me.uk/projects/PROFiLiX-Server/).
