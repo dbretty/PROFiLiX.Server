@@ -4,8 +4,8 @@
 
 namespace PROFiLiX.Web.Data.Initialize
 {
-    using PROFiLiX.Web.Shared.Models;
     using Microsoft.AspNetCore.Identity;
+    using PROFiLiX.Web.Shared.Models;
 
     /// <summary>
 	/// Class to Initialize the user roles within the identity DB.

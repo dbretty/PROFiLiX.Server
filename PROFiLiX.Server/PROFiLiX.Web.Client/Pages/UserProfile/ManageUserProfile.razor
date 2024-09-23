@@ -74,13 +74,14 @@
 </MudPaper>
 
 @code {
+
 	public UserProfile UserProfileModel { get; set; } = new();
 
 	[Parameter]
-	public int Id { get; set;  }
+	public int Id { get; set; }
 
-	private async Task HandleSave()
-	{
+    private async Task HandleSave()
+    {
 		if (UserProfileModel.Id > 0)
 		{
 			var result = await UserProfileService.UpdateUserProfileAsync(UserProfileModel);

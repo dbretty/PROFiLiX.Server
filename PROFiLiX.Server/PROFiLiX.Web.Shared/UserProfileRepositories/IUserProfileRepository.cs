@@ -16,21 +16,21 @@ namespace PROFiLiX.Web.Shared.UserProfileRepositories
 		/// </summary>
 		/// <param name="model">The User Profile model.</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<UserProfile> AddUserProfileAsync(UserProfile model);
+		Task<UserProfile?> AddUserProfileAsync(UserProfile model);
 
 		/// <summary>
 		/// Updates a user profile in the database.
 		/// </summary>
 		/// <param name="model">The User Profile model.</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<UserProfile> UpdateUserProfileAsync(UserProfile model);
+		Task<UserProfile?> UpdateUserProfileAsync(UserProfile model);
 
 		/// <summary>
 		/// Deletes a user profile from the database.
 		/// </summary>
 		/// <param name="userId">The User ID</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<UserProfile> DeleteUserProfileAsync(int userId);
+		Task<UserProfile?> DeleteUserProfileAsync(int userId);
 
 		/// <summary>
 		/// Gets all the user profiles from the database.
@@ -43,6 +43,6 @@ namespace PROFiLiX.Web.Shared.UserProfileRepositories
 		/// </summary>
 		/// <param name="userId">The User ID</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<UserProfile> GetUserProfileByIdAsync(int userId);
+		Task<UserProfile?> GetUserProfileByIdAsync(int userId);
     }
 }

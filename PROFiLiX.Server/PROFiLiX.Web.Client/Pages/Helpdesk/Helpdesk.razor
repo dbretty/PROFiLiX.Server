@@ -153,19 +153,37 @@
     {
         var authenticationState = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
         var loggedOnUser = authenticationState.User;
-        adminUserName = loggedOnUser.Identity.Name;
+        if(loggedOnUser.Identity is not null)
+        {
+            if (loggedOnUser.Identity.Name is not null)
+            {
+                adminUserName = loggedOnUser.Identity.Name;
+            }
+            else
+            {
+                adminUserName = "Not Logged In";
+            }
+        } else
+        {
+            adminUserName = "Not Logged In";
+        }
     }
 
     private async Task LoadUserProfiles()
     {
         var userProfiles = await UserProfileService.GetAllUserProfilesAsync();
-        UserProfiles?.Clear();
-        if (userProfiles is null) return;
-        foreach (var userProfile in userProfiles)
+        UserProfiles.Clear();
+        if (userProfiles is null) 
         {
-            if (userProfile.ActiveStatus)
+            return;
+        } else
+        {
+            foreach (var userProfile in userProfiles)
             {
-                UserProfiles.Add(userProfile);
+                if (userProfile.ActiveStatus)
+                {
+                    UserProfiles.Add(userProfile);
+                }
             }
         }
     }
@@ -186,10 +204,10 @@
 
     public class ClientAction
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
-    Func<ClientAction,string> converter = p => p?.Name;
+    Func<ClientAction,string> converter = p => p.Name;
 
     private async Task ExecuteClientAction(UserProfile context, string adminUserName, ClientAction clientAction)
     {
@@ -200,38 +218,41 @@
         task.TaskName = $"{adminUserName} initiated {clientAction.Name} for {context.UserName}";
         task.UserName = adminUserName;
         task.TaskState = ProfilixTaskState.Running;
-        var result = await EUCProfileBuddyTaskService.AddProfilixTaskAsync(task);
+        var result = await ProfilixTaskService.AddProfilixTaskAsync(task);
 
         bool executedAction = false;
 
-        switch (clientAction.Name)
+        if (hubConnection is not null)
         {
-            case "Clear Temp Files":
-                hubConnection.SendAsync("SendMessageToClient", "ClearTempFiles", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
-                executedAction = true;
-                break;
-            case "Reset Microsoft Edge":
-                hubConnection.SendAsync("SendMessageToClient", "ResetEdge", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
-                executedAction = true;
-                break;
-            case "Reset Google Chrome":
-                hubConnection.SendAsync("SendMessageToClient", "ResetChrome", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
-                executedAction = true;
-                break;
-            case "Reset Mozilla Firefox":
-                hubConnection.SendAsync("SendMessageToClient", "ResetFirefox", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
-                executedAction = true;
-                break;
-            case "Reset Teams Classic":
-                hubConnection.SendAsync("SendMessageToClient", "ResetTeamsClassic", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
-                executedAction = true;
-                break;
-            case "Reset Teams":
-                hubConnection.SendAsync("SendMessageToClient", "ResetTeams", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
-                executedAction = true; 
-                break;
-            default:
-                break;
+            switch (clientAction.Name)
+            {
+                case "Clear Temp Files":
+                    await hubConnection.SendAsync("SendMessageToClient", "ClearTempFiles", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    executedAction = true;
+                    break;
+                case "Reset Microsoft Edge":
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetEdge", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    executedAction = true;
+                    break;
+                case "Reset Google Chrome":
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetChrome", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    executedAction = true;
+                    break;
+                case "Reset Mozilla Firefox":
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetFirefox", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    executedAction = true;
+                    break;
+                case "Reset Teams Classic":
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetTeamsClassic", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    executedAction = true;
+                    break;
+                case "Reset Teams":
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetTeams", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    executedAction = true;
+                    break;
+                default:
+                    break;
+            }
         }
 
         if(executedAction == true)

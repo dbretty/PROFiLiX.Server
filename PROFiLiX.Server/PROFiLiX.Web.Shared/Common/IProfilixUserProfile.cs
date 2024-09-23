@@ -22,21 +22,21 @@ namespace PROFiLiX.Web.Shared.Common
         /// Gets the total number of profiles.
         /// </summary>
         /// <param name="profiles">The profiles array.</param>
-        /// <returns>A <see cref="UserProfileSummary"/>.</returns>
+        /// <returns>A <see cref="UserProfile"/>.</returns>
         int TotalProfiles(List<UserProfile> profiles);
 
         /// <summary>
         /// Gets the total profile size.
         /// </summary>
         /// <param name="profiles">The profiles array.</param>
-        /// <returns>A <see cref="UserProfileSummary"/>.</returns>
+        /// <returns>A <see cref="UserProfile"/>.</returns>
         long TotalProfileSize(List<UserProfile> profiles);
 
         /// <summary>
         /// Gets the total temp size.
         /// </summary>
         /// <param name="profiles">The profiles array.</param>
-        /// <returns>A <see cref="UserProfileSummary"/>.</returns>
+        /// <returns>A <see cref="UserProfile"/>.</returns>
         long TotalTempSize(List<UserProfile> profiles);
     }
 }

@@ -402,7 +402,7 @@
     protected override async Task OnInitializedAsync()
     {
 
-        var taskInformation = await EUCProfileBuddyTaskService.GetAllProfilixTasksAsync();
+        var taskInformation = await ProfilixTaskService.GetAllProfilixTasksAsync();
 
         completedTasks = taskInformation.Where(x => x.TaskState == ProfilixTaskState.Completed).Count();
         runningTasks = taskInformation.Where(x => x.TaskState == ProfilixTaskState.Running).Count();

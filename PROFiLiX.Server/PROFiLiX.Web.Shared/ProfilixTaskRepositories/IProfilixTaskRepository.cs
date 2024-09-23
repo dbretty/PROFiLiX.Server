@@ -16,21 +16,21 @@ namespace PROFiLiX.Web.Shared.ProfilixTaskRepositories
 		/// </summary>
 		/// <param name="model">The task data model.</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<ProfilixTask> AddProfilixTaskAsync(ProfilixTask model);
+		Task<ProfilixTask?> AddProfilixTaskAsync(ProfilixTask model);
 
 		/// <summary>
 		/// Updates a task in the database.
 		/// </summary>
 		/// <param name="model">The task data model.</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<ProfilixTask> UpdateProfilixTaskAsync(ProfilixTask model);
+		Task<ProfilixTask?> UpdateProfilixTaskAsync(ProfilixTask model);
 
 		/// <summary>
 		/// Deleted a task from the database.
 		/// </summary>
 		/// <param name="taskId">The task Id.</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<ProfilixTask> DeleteProfilixTaskAsync(int taskId);
+		Task<ProfilixTask?> DeleteProfilixTaskAsync(int taskId);
 
 		/// <summary>
 		/// Gets all the tasks from the database.
@@ -43,6 +43,6 @@ namespace PROFiLiX.Web.Shared.ProfilixTaskRepositories
 		/// </summary>
 		/// <param name="taskId">The task ID.</param>
 		/// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-		Task<ProfilixTask> GetProfilixTaskByIdAsync(int taskId);
+		Task<ProfilixTask?> GetProfilixTaskByIdAsync(int taskId);
     }
 }

@@ -4,9 +4,9 @@
 
 namespace PROFiLiX.Web.Data
 {
-    using PROFiLiX.Web.Shared.Models;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using PROFiLiX.Web.Shared.Models;
 
     /// <summary>
     /// EUC Profile Buddy Data Repository Class.

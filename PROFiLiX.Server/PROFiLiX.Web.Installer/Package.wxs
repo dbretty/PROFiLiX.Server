@@ -10,7 +10,7 @@
 			<Property Id="ARPHELPLINK" Value="$(var.InfoURL)" />
 			<Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
 	  
-			<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" AllowSameVersionUpgrades="yes" />
+			<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" AllowSameVersionUpgrades="no" />
 	  
 			<MediaTemplate EmbedCab="yes" />
 

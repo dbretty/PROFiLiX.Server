@@ -1,2 +1,12 @@
-# PROFiLiX.Server
- Windows Profile Management Tool (Server). Enables centralized monitoring, reporting and the ability to perform profile actions on connected clients.
+![Build Workflow](https://github.com/dbretty/PROFiLiX.Server/actions/workflows/build.yml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+# PROFiLiX Server
+
+Blazor web application to centrally manage your PROFiLiX Client deployment. Includes user and admin options to effectively manage profile size, settings, backup and more.
+
+Gives you as an administrator the ability to centrally monitor your deployment of PROFiLiX. Has options for tasks executed as well as profile overview. It also has a full Swagger and ReDoc Api available.
+
+![](/Images/PROFiLiX.Server.Server.png)
+
+For full information and documentation please visit [https://bretty.me.uk/projects/PROFiLiX-Server/](https://bretty.me.uk/projects/PROFiLiX-Server/).

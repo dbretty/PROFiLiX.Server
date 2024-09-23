@@ -117,7 +117,7 @@
 
     @if (pageLoaded == true)
     {
-        <MudTable Items="@EUCProfileBuddyTasks" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true" FixedFooter="true" Filter="new Func<ProfilixTask,bool>(FilterFunc1)">
+        <MudTable Items="@ProfilixTasks" Hover="true" Breakpoint="Breakpoint.Sm" FixedHeader="true" FixedFooter="true" Filter="new Func<ProfilixTask,bool>(FilterFunc1)">
 
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Task List</MudText>
@@ -252,26 +252,30 @@
     public bool pageLoaded = false;
     private string searchString1 = "";
 
-    private List<ProfilixTask> EUCProfileBuddyTasks { get; set; } = new();
+    private List<ProfilixTask> ProfilixTasks { get; set; } = new();
 
     private async Task LoadTasks()
     {
-        List<ProfilixTask> tasks = await EUCProfileBuddyTaskService.GetAllProfilixTasksAsync();
-       
-        EUCProfileBuddyTasks?.Clear();
-        if (tasks is null) return;
-        foreach (var task in tasks.OrderByDescending(_ => _.TaskExecuted))
-            EUCProfileBuddyTasks.Add(task);
+        List<ProfilixTask> tasks = await ProfilixTaskService.GetAllProfilixTasksAsync();
+
+        ProfilixTasks.Clear();
+        if (tasks is null) {
+            return;
+        } else
+        {
+            foreach (var task in tasks.OrderByDescending(_ => _.TaskExecuted))
+                ProfilixTasks.Add(task);
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
         await LoadTasks();
 
-        completedTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Completed).Count();
-        runningTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Running).Count();
-        erroredTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Errored).Count();
-        unknownTasks = EUCProfileBuddyTasks.Where(x => x.TaskState == ProfilixTaskState.Unknown).Count();
+        completedTasks = ProfilixTasks.Where(x => x.TaskState == ProfilixTaskState.Completed).Count();
+        runningTasks = ProfilixTasks.Where(x => x.TaskState == ProfilixTaskState.Running).Count();
+        erroredTasks = ProfilixTasks.Where(x => x.TaskState == ProfilixTaskState.Errored).Count();
+        unknownTasks = ProfilixTasks.Where(x => x.TaskState == ProfilixTaskState.Unknown).Count();
 
         pageLoaded = true;
     }

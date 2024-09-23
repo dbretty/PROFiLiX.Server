@@ -25,7 +25,7 @@ namespace PROFiLiX.Web.Client.Services
         }
 
 		/// <inheritdoc/>
-		public async Task<UserProfile> AddUserProfileAsync(UserProfile model)
+		public async Task<UserProfile?> AddUserProfileAsync(UserProfile model)
         {
             var userProfile = await this.httpClient.PostAsJsonAsync("api/UserProfile/Add-User-Profile/", model);
             var response = await userProfile.Content.ReadFromJsonAsync<UserProfile>();
@@ -33,7 +33,7 @@ namespace PROFiLiX.Web.Client.Services
         }
 
 		/// <inheritdoc/>
-		public async Task<UserProfile> DeleteUserProfileAsync(int userId)
+		public async Task<UserProfile?> DeleteUserProfileAsync(int userId)
         {
             var userProfile = await this.httpClient.DeleteAsync($"api/UserProfile/Delete-User-Profile/{userId}");
             var response = await userProfile.Content.ReadFromJsonAsync<UserProfile>();
@@ -49,7 +49,7 @@ namespace PROFiLiX.Web.Client.Services
         }
 
 		/// <inheritdoc/>
-		public async Task<UserProfile> GetUserProfileByIdAsync(int userId)
+		public async Task<UserProfile?> GetUserProfileByIdAsync(int userId)
         {
 			var userProfile = await this.httpClient.GetAsync($"api/UserProfile/Single-User-Profile/{userId}");
             var response = await userProfile.Content.ReadFromJsonAsync<UserProfile>();
@@ -57,7 +57,7 @@ namespace PROFiLiX.Web.Client.Services
         }
 
 		/// <inheritdoc/>
-		public async Task<UserProfile> UpdateUserProfileAsync(UserProfile model)
+		public async Task<UserProfile?> UpdateUserProfileAsync(UserProfile model)
         {
             var userProfile = await this.httpClient.PutAsJsonAsync("api/UserProfile/Update-User-Profile/", model);
             var response = await userProfile.Content.ReadFromJsonAsync<UserProfile>();

@@ -131,10 +131,14 @@
     private async Task LoadUserProfiles()
     {
         var userProfiles = await UserProfileService.GetAllUserProfilesAsync();
-        UserProfiles?.Clear();
-        if (userProfiles is null) return;
-        foreach (var userProfile in userProfiles)
-            UserProfiles.Add(userProfile);
+        UserProfiles.Clear();
+        if (userProfiles is null) {
+            return;
+        } else
+        {
+            foreach (var userProfile in userProfiles)
+                UserProfiles.Add(userProfile);
+        }
     }
 
     protected override async Task OnInitializedAsync()

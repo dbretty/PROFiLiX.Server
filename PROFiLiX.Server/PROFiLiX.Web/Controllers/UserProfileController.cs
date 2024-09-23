@@ -1,11 +1,17 @@
-﻿using AutoMapper;
-using PROFiLiX.Web.Shared.Models;
-using PROFiLiX.Web.Shared.UserProfileRepositories;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
+﻿// <copyright file="UserProfileController.cs" company="bretty.me.uk">
+// Copyright (c) bretty.me.uk. All rights reserved.
+// </copyright>
 
 namespace PROFiLiX.Web.Controllers
 {
+    using System.Net;
+    using Microsoft.AspNetCore.Mvc;
+    using PROFiLiX.Web.Shared.Models;
+    using PROFiLiX.Web.Shared.UserProfileRepositories;
+
+    /// <summary>
+	/// Class to represent the Api for the User Profile Controller.
+	/// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -40,11 +46,12 @@ namespace PROFiLiX.Web.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound, type: typeof(string))]
         public async Task<ActionResult<List<UserProfile>>> GetAllUserProfilesAsync()
         {
-            var userProfiles = await userProfileRepository.GetAllUserProfilesAsync();
+            var userProfiles = await this.userProfileRepository.GetAllUserProfilesAsync();
             if (userProfiles == null)
             {
                 return this.NotFound("No user profiles found");
-            } else
+            }
+            else
             {
                 return this.Ok(userProfiles);
             }
@@ -53,11 +60,12 @@ namespace PROFiLiX.Web.Controllers
         /// <summary>
         /// Gets a single User Profile record.
         /// </summary>
+        /// <param name="id">The user profile id.</param>
         /// <returns>A <see cref="Task{UserProfile}"/> representing the result of the asynchronous operation.</returns>
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /api/UserProfile/Single-User-Profiles/{id}
+        ///     GET /api/UserProfile/Single-User-Profile/{id}
         ///     {
         ///     }
         ///
@@ -69,7 +77,7 @@ namespace PROFiLiX.Web.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.NotFound, type: typeof(string))]
         public async Task<ActionResult> GetSingleUserProfileAsync(int id)
         {
-            var userProfile = await userProfileRepository.GetUserProfileByIdAsync(id);
+            var userProfile = await this.userProfileRepository.GetUserProfileByIdAsync(id);
             if (userProfile == null)
             {
                 return this.NotFound("User Profile not found");
@@ -105,7 +113,7 @@ namespace PROFiLiX.Web.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.BadRequest, type: typeof(string))]
         public async Task<IActionResult> AddUserProfileAsync([FromBody] UserProfile model)
         {
-            var userProfile = await userProfileRepository.AddUserProfileAsync(model);
+            var userProfile = await this.userProfileRepository.AddUserProfileAsync(model);
             return this.Ok(userProfile);
         }
 
@@ -131,11 +139,12 @@ namespace PROFiLiX.Web.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.BadRequest, type: typeof(string))]
         public async Task<IActionResult> UpdateUserProfileAsync(UserProfile model)
         {
-            var userProfile = await userProfileRepository.UpdateUserProfileAsync(model);
+            var userProfile = await this.userProfileRepository.UpdateUserProfileAsync(model);
             if (userProfile == null)
             {
                 return this.BadRequest("User Profile not found");
-            } else
+            }
+            else
             {
                 return this.Ok(userProfile);
             }
@@ -162,15 +171,15 @@ namespace PROFiLiX.Web.Controllers
         [ProducesResponseType(statusCode: (int)HttpStatusCode.BadRequest, type: typeof(string))]
         public async Task<ActionResult<List<UserProfile>>> DeleteUserProfileAsync(int id)
         {
-            var userProfile = await userProfileRepository.DeleteUserProfileAsync(id);
+            var userProfile = await this.userProfileRepository.DeleteUserProfileAsync(id);
             if (userProfile == null)
             {
                 return this.BadRequest("User Profile not found");
-            } else
+            }
+            else
             {
                 return this.Ok(userProfile);
             }
         }
-
     }
 }

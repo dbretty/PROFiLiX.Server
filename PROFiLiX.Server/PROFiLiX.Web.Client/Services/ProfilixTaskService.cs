@@ -25,7 +25,7 @@ namespace PROFiLiX.Web.Client.Services
 		}
 
 		/// <inheritdoc/>
-		public async Task<ProfilixTask> AddProfilixTaskAsync(ProfilixTask model)
+		public async Task<ProfilixTask?> AddProfilixTaskAsync(ProfilixTask model)
 		{
 			var task = await this.httpClient.PostAsJsonAsync("api/ProfilixTask/Add-Task/", model);
 			var response = await task.Content.ReadFromJsonAsync<ProfilixTask>();
@@ -33,7 +33,7 @@ namespace PROFiLiX.Web.Client.Services
 		}
 
 		/// <inheritdoc/>
-		public async Task<ProfilixTask> DeleteProfilixTaskAsync(int taskId)
+		public async Task<ProfilixTask?> DeleteProfilixTaskAsync(int taskId)
 		{
 			var task = await this.httpClient.DeleteAsync($"api/ProfilixTask/Delete-Task/{taskId}");
 			var response = await task.Content.ReadFromJsonAsync<ProfilixTask>();
@@ -49,7 +49,7 @@ namespace PROFiLiX.Web.Client.Services
 		}
 
 		/// <inheritdoc/>
-		public async Task<ProfilixTask> GetProfilixTaskByIdAsync(int taskId)
+		public async Task<ProfilixTask?> GetProfilixTaskByIdAsync(int taskId)
 		{
 			var task = await this.httpClient.GetAsync($"api/ProfilixTask/Single-Task/{taskId}");
 			var response = await task.Content.ReadFromJsonAsync<ProfilixTask>();
@@ -57,7 +57,7 @@ namespace PROFiLiX.Web.Client.Services
 		}
 
 		/// <inheritdoc/>
-		public async Task<ProfilixTask> UpdateProfilixTaskAsync(ProfilixTask model)
+		public async Task<ProfilixTask?> UpdateProfilixTaskAsync(ProfilixTask model)
 		{
 			var task = await this.httpClient.PutAsJsonAsync("api/ProfilixTask/Update-Task/", model);
 			var response = await task.Content.ReadFromJsonAsync<ProfilixTask>();
