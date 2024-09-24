@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-PROFiLiX.Web-954cb122-cf3b-4703-8573-9209454176d3</UserSecretsId>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,9 +27,10 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.7.3" />
-	<AdditionalFiles Include="stylecop.json" />
+	<AdditionalFiles Include="stylecop.json">
+	  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	</AdditionalFiles>
   </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\PROFiLiX.Web.Client\PROFiLiX.Web.Client.csproj" />

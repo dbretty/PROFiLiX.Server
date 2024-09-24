@@ -401,3 +401,5 @@ PROFiLiX.Server/PROFiLiX.Web/.config/dotnet-tools.json
 PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db
 PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db-shm
 PROFiLiX.Server/PROFiLiX.Web/Profile.Data.Repository.db-wal
+PROFiLiX.Web/Profile.Data.Repository.db-shm
+PROFiLiX.Web/Profile.Data.Repository.db-wal
