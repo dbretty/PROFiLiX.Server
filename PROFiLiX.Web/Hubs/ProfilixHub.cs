@@ -32,10 +32,13 @@ namespace PROFiLiX.Web.Hubs
         /// <param name="adminUserName">The user sending the message.</param>
         /// <param name="connectionId">The connection id.</param>
         /// <param name="taskId">The task id.</param>
+        /// <param name="customTaskName">The custom task name.</param>
+        /// <param name="actionType">The action type.</param>
+        /// <param name="customTaskContent">The custom task content.</param>
 		/// <returns>A <see cref="Task"/> representing the result of the asynchronous operation.</returns>
-        public Task SendMessageToClient(string clientAction, string adminUserName, string connectionId, int taskId)
+        public Task SendMessageToClient(string clientAction, string adminUserName, string connectionId, int taskId, string customTaskName, ActionType actionType, string customTaskContent)
         {
-            return this.Clients.Client(connectionId).SendAsync(method: "ReceiveMessage", clientAction, adminUserName, connectionId, taskId);
+            return this.Clients.Client(connectionId).SendAsync(method: "ReceiveMessage", clientAction, adminUserName, connectionId, taskId, customTaskName, actionType, customTaskContent);
         }
 
         /// <summary>

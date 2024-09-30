@@ -97,6 +97,10 @@
                         <MudSelectItem Value="@(new ClientAction() { Name="Reset Mozilla Firefox"})" />
                         <MudSelectItem Value="@(new ClientAction() { Name="Reset Teams Classic"})" />
                         <MudSelectItem Value="@(new ClientAction() { Name="Reset Teams"})" />
+                        @foreach (var customAction in CustomActionList)
+                        {
+                            <MudSelectItem Value="@(new ClientAction() { Name=customAction.ActionName, ActionType=customAction.ActionType, ActionContent=customAction.ActionContent })" />
+                        }
                     </MudSelect>
                 </MudTd>
 
@@ -143,11 +147,27 @@
     public IProfilixUserProfile userProfile = new ProfilixUserProfile();
     private List<UserProfile> UserProfiles { get; set; } = new();
     ClientAction clientAction = new ClientAction { Name = "Select Action" };
+    private List<ProfilixCustomAction> CustomActionList { get; set; } = new();
 
     private string adminUserName = string.Empty;
     private HubConnection? hubConnection;
     public bool pageLoaded = false;
     private string searchString1 = "";
+
+    private async Task LoadCustomActions()
+    {
+        var customActions = await ProfilixCustomActionService.GetAllProfilixCustomActionsAsync();
+        CustomActionList.Clear();
+        if (customActions is null)
+        {
+            return;
+        }
+        else
+        {
+            foreach (var customAction in customActions)
+                CustomActionList.Add(customAction);
+        }
+    }
 
     private async void GetUserName()
     {
@@ -199,12 +219,15 @@
 
         GetUserName();
         await LoadUserProfiles();
+        await LoadCustomActions();
         pageLoaded = true;
     }
 
     public class ClientAction
     {
         public string Name { get; set; } = string.Empty;
+        public ActionType ActionType { get; set; } = ActionType.Unknown;
+        public string ActionContent { get; set; } = string.Empty;
     }
 
     Func<ClientAction,string> converter = p => p.Name;
@@ -227,30 +250,32 @@
             switch (clientAction.Name)
             {
                 case "Clear Temp Files":
-                    await hubConnection.SendAsync("SendMessageToClient", "ClearTempFiles", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    await hubConnection.SendAsync("SendMessageToClient", "ClearTempFiles", adminUserName, destinationUserProfile.HubConnectionId, result.Id, "none", ActionType.Unknown, "none");
                     executedAction = true;
                     break;
                 case "Reset Microsoft Edge":
-                    await hubConnection.SendAsync("SendMessageToClient", "ResetEdge", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetEdge", adminUserName, destinationUserProfile.HubConnectionId, result.Id, string.Empty, ActionType.Unknown, string.Empty);
                     executedAction = true;
                     break;
                 case "Reset Google Chrome":
-                    await hubConnection.SendAsync("SendMessageToClient", "ResetChrome", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetChrome", adminUserName, destinationUserProfile.HubConnectionId, result.Id, string.Empty, ActionType.Unknown, string.Empty);
                     executedAction = true;
                     break;
                 case "Reset Mozilla Firefox":
-                    await hubConnection.SendAsync("SendMessageToClient", "ResetFirefox", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetFirefox", adminUserName, destinationUserProfile.HubConnectionId, result.Id, string.Empty, ActionType.Unknown, string.Empty);
                     executedAction = true;
                     break;
                 case "Reset Teams Classic":
-                    await hubConnection.SendAsync("SendMessageToClient", "ResetTeamsClassic", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetTeamsClassic", adminUserName, destinationUserProfile.HubConnectionId, result.Id, string.Empty, ActionType.Unknown, string.Empty);
                     executedAction = true;
                     break;
                 case "Reset Teams":
-                    await hubConnection.SendAsync("SendMessageToClient", "ResetTeams", adminUserName, destinationUserProfile.HubConnectionId, result.Id);
+                    await hubConnection.SendAsync("SendMessageToClient", "ResetTeams", adminUserName, destinationUserProfile.HubConnectionId, result.Id, string.Empty, ActionType.Unknown, string.Empty);
                     executedAction = true;
                     break;
                 default:
+                    await hubConnection.SendAsync("SendMessageToClient", "Custom", adminUserName, destinationUserProfile.HubConnectionId, result.Id, clientAction.Name, clientAction.ActionType, clientAction.ActionContent);
+                    executedAction = true;
                     break;
             }
         }

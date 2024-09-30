@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.WindowsServices;
 using MudBlazor.Services;
 using NSwag;
+using PROFiLiX.Web.Shared.ProfilixCustomActionRepositories;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
@@ -59,6 +60,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IProfilixTaskRepository, ProfilixTaskRepository>();
+builder.Services.AddScoped<IProfilixCustomActionRepository, ProfilixCustomActionRepository>();
 builder.Services.AddScoped(http => new HttpClient
 {
     BaseAddress = new Uri(builder.Configuration.GetSection("BaseAddress").Value!)

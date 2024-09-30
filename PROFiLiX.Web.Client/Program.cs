@@ -7,6 +7,7 @@ using PROFiLiX.Web.Shared.UserProfileRepositories;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
+using PROFiLiX.Web.Shared.ProfilixCustomActionRepositories;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -19,5 +20,6 @@ builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticat
 
 builder.Services.AddScoped<IUserProfileRepository, UserProfileService>();
 builder.Services.AddScoped<IProfilixTaskRepository, ProfilixTaskService>();
+builder.Services.AddScoped<IProfilixCustomActionRepository, ProfilixCustomActionService>();
 
 await builder.Build().RunAsync();

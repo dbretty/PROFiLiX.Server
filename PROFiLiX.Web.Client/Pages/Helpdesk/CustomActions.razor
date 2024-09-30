@@ -1,0 +1,150 @@
+﻿@page "/CustomActions"
+
+@using PROFiLiX.Web.Shared.Common
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<PageTitle>Custom Actions</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+    <MudText Typo="Typo.h5" Align="Align.Left" Class="px-4">
+        Custom Actions
+    </MudText>
+
+    <br />
+
+    @if (pageLoaded == true)
+    {
+        <MudTable Items="@CustomActionList" Hover="true" Breakpoint="Breakpoint.Sm">
+
+            <HeaderContent>
+
+                <MudTh>
+                    <MudTooltip Text="Action Name" Placement="Placement.Right">
+                            Action Name
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Action Type" Placement="Placement.Right">
+                            Action Type
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Action Description" Placement="Placement.Right">
+                            Action Description
+                    </MudTooltip>
+                </MudTh>
+
+                <MudTh>
+                    <MudTooltip Text="Actions" Placement="Placement.Right">
+
+                    </MudTooltip>
+                </MudTh>
+
+            </HeaderContent>
+
+            <RowTemplate>
+
+                <MudTd DataLabel="ActionName">
+                    @context.ActionName
+                </MudTd>
+
+                <MudTd DataLabel="ActionType">
+                    @context.ActionType
+                </MudTd>
+
+                <MudTd DataLabel="ActionDescription">
+                    <MudTooltip Text="@context.ActionContent" Placement="Placement.Start">
+                        @context.ActionDescription
+                    </MudTooltip>
+                </MudTd>
+
+                <MudTd DataLabel="Actions">
+                    <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="() => Edit(context)"></MudIconButton>
+                    <MudIconButton Icon="@Icons.Material.Outlined.DeleteForever" @onclick="() => Delete(context.Id)"></MudIconButton>
+                </MudTd>
+
+            </RowTemplate>
+
+            <PagerContent>
+                <MudBreakpointProvider>
+                    <MudHidden Breakpoint="Breakpoint.Xs" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Sm" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Md" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" HideRowsPerPage="true" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Lg" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Xl" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                    <MudHidden Breakpoint="Breakpoint.Xxl" Invert="true">
+                        <MudTablePager PageSizeOptions="new int[]{10,20,30,40,50}" />
+                    </MudHidden>
+                </MudBreakpointProvider>
+            </PagerContent>
+
+        </MudTable>
+    }
+    else
+    {
+        <PageLoading />
+    }
+
+    <br />
+
+    <MudButton Variant="Variant.Outlined" Color="Color.Primary" @onclick="() => NavigateToAddCustomActionPage()">Add Custom Action</MudButton>
+
+</MudPaper>
+
+@code {
+    private List<ProfilixCustomAction> CustomActionList { get; set; } = new();
+    public bool pageLoaded = false;
+
+    private async Task LoadCustomActions()
+    {
+        var customActions = await ProfilixCustomActionService.GetAllProfilixCustomActionsAsync();
+        CustomActionList.Clear();
+        if (customActions is null)
+        {
+            return;
+        }
+        else
+        {
+            foreach (var customAction in customActions)
+                CustomActionList.Add(customAction);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageLoaded = false;
+        await LoadCustomActions();
+        pageLoaded = true;
+    }
+
+    private void NavigateToAddCustomActionPage()
+    {
+        NavigationManager.NavigateTo("/ManageCustomAction");
+    }
+
+    private void Edit(ProfilixCustomAction model)
+    {
+        NavigationManager.NavigateTo($"/ManageCustomAction/{model.Id}");
+    }
+
+    private async void Delete(int id)
+    {
+        var customAction = await ProfilixCustomActionService.DeleteProfilixCustomActionAsync(id);
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+}

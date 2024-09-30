@@ -1,0 +1,104 @@
+﻿@page "/ManageCustomAction"
+@page "/ManageCustomAction/{Id:int}"
+
+@using PROFiLiX.Web.Shared.Models.Enum
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<PageTitle>Manage Custom Action</PageTitle>
+
+<MudPaper Class="pa-2 ma-2" Elevation="25">
+
+	<MudGrid Spacing="12" Justify="Justify.Center">
+
+		<MudItem md="12">
+
+			<EditForm Model="@ProfilixCustomActionModel" OnValidSubmit="HandleSave">
+				<DataAnnotationsValidator />
+
+				<MudText Typo="Typo.h5" Align="Align.Left" Class="px-4">
+					Manage Custom Action
+				</MudText>
+
+				<br />
+
+				<MudGrid>
+
+					<MudItem md="12" xs="12">
+						<MudText Typo="Typo.body1">Action Name</MudText>
+						<MudTextField @bind-Value="ProfilixCustomActionModel.ActionName" For="@(() => ProfilixCustomActionModel.ActionName)" />
+					</MudItem>
+
+					<MudItem md="12" xs="12">
+						<MudText Typo="Typo.body1">Action Description</MudText>
+						<MudTextField @bind-Value="ProfilixCustomActionModel.ActionDescription" For="@(() => ProfilixCustomActionModel.ActionDescription)" />
+					</MudItem>
+
+					<MudItem md="12" xs="12">
+						<MudText Typo="Typo.body1">Action Type</MudText>
+						<MudSelect @bind-Value="ProfilixCustomActionModel.ActionType">
+							@foreach (var margin in Enum.GetValues(typeof(ActionType)).Cast<ActionType>())
+							{
+								<MudSelectItem Value="margin">@margin</MudSelectItem>
+							}
+						</MudSelect>
+					</MudItem>
+
+					<MudItem md="12" xs="12">
+						<MudText Typo="Typo.body1">Action Content</MudText>
+						<MudTextField T="string" Variant="Variant.Outlined" AutoGrow @bind-Value="ProfilixCustomActionModel.ActionContent" For="@(() => ProfilixCustomActionModel.ActionContent)" />
+					</MudItem>
+
+					<MudItem md="12" xs="12">
+						<MudButton ButtonType="ButtonType.Submit" FullWidth="true" Variant="Variant.Outlined" Color="Color.Primary">Save</MudButton>
+					</MudItem>
+
+					<MudItem md="12" xs="12">
+						<MudButton Variant="Variant.Outlined" FullWidth="true" Color="Color.Primary" @onclick="() => NavigateToCustomActionList()">Return To Custom Action List</MudButton>
+					</MudItem>
+
+				</MudGrid>
+
+			</EditForm>
+
+		</MudItem>
+	</MudGrid>
+
+
+</MudPaper>
+@code {
+	public ProfilixCustomAction ProfilixCustomActionModel { get; set; } = new();
+
+	[Parameter]
+	public int Id { get; set; }
+
+	private async Task HandleSave()
+	{
+		if (ProfilixCustomActionModel.Id > 0)
+		{
+			var result = await ProfilixCustomActionService.UpdateProfilixCustomActionAsync(ProfilixCustomActionModel);
+			ProfilixCustomActionModel = new();
+		}
+		else
+		{
+			var result = await ProfilixCustomActionService.AddProfilixCustomActionAsync(ProfilixCustomActionModel);
+			ProfilixCustomActionModel = new();
+		}
+
+		NavigationManager.NavigateTo("/CustomActions");
+	}
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if (Id > 0)
+		{
+			ProfilixCustomActionModel = await ProfilixCustomActionService.GetProfilixCustomActionByIdAsync(Id);
+		}
+	}
+
+	private void NavigateToCustomActionList()
+	{
+		NavigationManager.NavigateTo("/CustomActions");
+	}
+}

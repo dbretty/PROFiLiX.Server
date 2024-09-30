@@ -50,8 +50,6 @@ namespace PROFiLiX.Web.Shared.Common
         /// <inheritdoc/>
         public string FormatFileSize(long bytes)
         {
-            ArgumentNullException.ThrowIfNull(bytes, nameof(bytes));
-
             var unit = 1024;
             if (bytes < unit)
             {

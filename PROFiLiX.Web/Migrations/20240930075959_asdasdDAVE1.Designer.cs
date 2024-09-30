@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PROFiLiX.Web.Data;
 
@@ -10,9 +11,11 @@ using PROFiLiX.Web.Data;
 namespace PROFiLiX.Web.Migrations
 {
     [DbContext(typeof(ProfileDataRepository))]
-    partial class ProfileDataRepositoryModelSnapshot : ModelSnapshot
+    [Migration("20240930075959_asdasdDAVE1")]
+    partial class asdasdDAVE1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -216,10 +219,6 @@ namespace PROFiLiX.Web.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ActionContent")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ActionDescription")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

@@ -31,5 +31,10 @@ namespace PROFiLiX.Web.Data
 		/// Gets or sets the User Profile Table.
 		/// </summary>
 		public DbSet<UserProfile> UserProfile { get; set; }
-    }
+
+		/// <summary>
+		/// Gets or sets the Custom Action Table.
+		/// </summary>
+		public DbSet<ProfilixCustomAction> ProfilixCustomAction { get; set; }
+	}
 }
